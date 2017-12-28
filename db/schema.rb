@@ -13,8 +13,8 @@
 ActiveRecord::Schema.define(version: 20171225095511) do
 
   create_table "follow_lists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "user_id"
     t.string "screen_name"
-    t.string "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
