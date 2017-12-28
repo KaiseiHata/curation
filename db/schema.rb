@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171225095511) do
+ActiveRecord::Schema.define(version: 20171228230354) do
 
   create_table "follow_lists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
     t.string "screen_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "followed", default: false, null: false
   end
 
 end
