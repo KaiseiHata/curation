@@ -22,6 +22,35 @@ class Follow
     end
   end
 
+  def self.follow_list
+    consumer_key        = ENV['CONSUMER_KEY']
+    consumer_secret     = ENV['CONSUMER_SECRET']
+    access_token        = ENV['ACCESS_TOKEN']
+    access_token_secret = ENV['ACCESS_TOKEN_SECRET']
+
+    consumer = OAuth::Consumer.new(
+    consumer_key,
+    consumer_secret,
+    site:'https://api.twitter.com/'
+    )
+    endpoint = OAuth::AccessToken.new(consumer, access_token, access_token_secret)
+
+    response = endpoint.get('https://api.twitter.com/1.1/followers/ids.json?screen_name=JK_writers&count=5000')
+    result = JSON.parse(response.body)
+    ids = result["ids"]
+    for id in ids do
+      FollowList.where(user_id: id).first_or_create
+    end
+  end
+
+  def self.follow_follow_list
+    FollowList.where(followed: 0).limit(10).each do |f|
+      @client.follow(f.user_id)
+      followlist.followed = 1
+      followlist.save
+    end
+  end
+
   def self.follow_commented_person
     # FollowList.select
     FollowList.where(followed: 0).limit(10).each do |followlist|
@@ -31,8 +60,4 @@ class Follow
       followlist.save
     end
   end
-
-  # def self.tweet(str)
-  #   @@client.update(str)
-  # end
 end
