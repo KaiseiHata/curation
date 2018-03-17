@@ -1,5 +1,4 @@
 class Follow
-
   @client = Twitter::REST::Client.new do |config|
     config.consumer_key        = ENV['CONSUMER_KEY']
     config.consumer_secret     = ENV['CONSUMER_SECRET']
@@ -24,10 +23,16 @@ class Follow
   end
 
   def self.follow_commented_person
-    # @client.follow(tweet.user.id)
+    # FollowList.select
+    FollowList.where(followed: 0).limit(10).each do |followlist|
+      @client.follow(followlist.user_id)
+      followlist.followed = 1
+      puts followlist.followed
+      followlist.save
+    end
   end
 
-  def self.tweet(str)
-    # @client.update(str)
-  end
+  # def self.tweet(str)
+  #   @@client.update(str)
+  # end
 end
